@@ -58,8 +58,8 @@ function Dashboard() {
     startDate: Date;
     endDate: Date;
   }>({
-    startDate: new Date(storedDates["startDate"]),
-    endDate: new Date(storedDates["endDate"]),
+    startDate: new Date(storedDates ? storedDates.startDate : Date.now()),
+    endDate: new Date(storedDates ? storedDates.endDate : Date.now()),
   });
 
   const debouncedDateSelection = useDebounce(dashboardPeriod);
@@ -140,7 +140,7 @@ function Dashboard() {
             <DashboardTopBar
               dashboardPeriod={dashboardPeriod}
               updateDashboardPeriod={setDashboardPeriod}
-              filterProperties={filterProperties}
+              filterProperties={filterProperties ? filterProperties : INITIAL_FILTER_PROPERTIES}
               setFilterProperties={setFilterProperties}
             />
           </div>
