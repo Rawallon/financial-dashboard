@@ -153,6 +153,13 @@ function Dashboard() {
         </div>
         <main className="flex-1 overflow-y-auto pt-8 px-6  bg-base-200">
             <DashboardTopCards transactions={transactions} />
+
+            <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
+              <LineChart
+                dates={dashboardPeriod}
+                transactions={transactionsDateFiltered}
+              />
+            </div>
         </main>
       </div>
       <LeftSidebar />
