@@ -164,6 +164,12 @@ function Dashboard() {
                 transactions={transactionsDateFiltered}
               />
             </div>
+
+            <div className="divider"></div>
+
+            <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
+              <TableData transactions={transactions} />
+            </div>
         </main>
       </div>
       <LeftSidebar />
