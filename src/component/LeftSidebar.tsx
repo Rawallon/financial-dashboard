@@ -1,11 +1,20 @@
 "use client";
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function LeftSidebar() {
+  const { push } = useRouter();
   const close = () => {
     document.getElementById("left-sidebar-drawer")?.click();
+  };
+  const logout = async () => {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+    await response.json();
+    return push("/");
   };
   return (
     <div className="lg:sticky lg:pointer-events-auto drawer-side">
@@ -32,7 +41,7 @@ function LeftSidebar() {
           <Link href="/404">404</Link>
         </li>
         <li className="mb-2 font-semibold text-xl">
-          <Link href="/logout">Logout</Link>
+          <button onClick={() => logout()}>Logout</button>
         </li>
       </ul>
     </div>
