@@ -18,10 +18,7 @@ function DashboardStats({
 }: DashboardStatsProps) {
   let parsedValue = value;
   if (typeof value === "number") {
-    parsedValue = convertNumberToFloat(value).toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+    parsedValue = convertNumberToFloat(value)
   }
 
   return (
