@@ -1,6 +1,6 @@
-import { sorteablePropertiesType } from "@/component/dashboard/PropertyChart";
 
 import { Totals } from "./transactionUtils";
+import { sorteablePropertiesType } from "./types";
 
 interface sortedTotals extends Totals {
   key: string;
