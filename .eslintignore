@@ -1,0 +1,11 @@
+**/node_modules/**
+**/.next/**
+**/.vercel/**
+**/lib/**
+
+!.lintstagedrc.js
+!.eslintrc.js
+node_modules/
+lib/
+*.config.js
+*.test.js
