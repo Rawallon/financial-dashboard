@@ -1,6 +1,13 @@
 # Financial Dashbord - Technical Challenge
 
+
 This project is a financial dashboard that allows users to analyze balances, revenues, expenses, pending transactions, and transaction history. It provides an intuitive and user-friendly interface for effective financial monitoring.
+
+## Demo
+
+<a title="Deployed with Vercel" href="https://financial-dashboard-cyan.vercel.app/">
+<img alt="Deployed with Vercel" src="https://img.shields.io/badge/Deployed%20with%20Vercel-%23000?style=plastic&logo=vercel&logoColor=white" width="200px" />
+</a> 
 
 ## Introduction
 
