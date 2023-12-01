@@ -2,37 +2,70 @@
 
 import { useEffect, useState } from "react";
 
+import BarChart from "@/component/dashboard/BarChart";
 import DashboardTopBar from "@/component/dashboard/DashboardTopBar";
+import DashboardTopCards from "@/component/dashboard/DashboardTopCards";
+import DoughnutChart from "@/component/dashboard/DoughnutChart";
+import LineChart from "@/component/dashboard/LineChart";
+import TableData from "@/component/dashboard/TableData";
 import LeftSidebar from "@/component/LeftSidebar";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useDebounce from "@/utils/debounce";
 import { Transactions } from "@/utils/transactions";
 import transactionsJSON from "@/utils/transactions.json";
+import calculateTotal, { Totals } from "@/utils/transactionUtils";
+import { SelectablePropertiesType } from "@/utils/types";
 
 const transactionsData = transactionsJSON as Transactions;
+export const selectableProperties = [
+  { value: "industry", name: "Industry" },
+  { value: "state", name: "State" },
+  { value: "account", name: "Account" },
+];
 
+export type FilterProperties<T> = {
+  group: SelectablePropertiesType;
+  withdraw: T;
+  deposit: T;
+  profit: T;
+  amount: T;
+};
 
+const INITIAL_FILTER_PROPERTIES = {
+  group: "industry" as SelectablePropertiesType,
+  withdraw: { min: null, max: null },
+  deposit: { min: null, max: null },
+  profit: { min: null, max: null },
+  amount: { min: null, max: null },
+};
 
 function Dashboard() {
-
+  const [storedFilterProperties, setStoredFilterProperties] = useLocalStorage(
+    "filterProperties",
+    INITIAL_FILTER_PROPERTIES
+  );
   const getOneWeekAgo = () => {
     const today = new Date();
     const oneWeekAgo = new Date(today);
     oneWeekAgo.setDate(today.getDate() - 7);
     return oneWeekAgo;
   };
-  const [storedDashboardPeriod, setStoredDashboardPeriod] = useLocalStorage("selectedDates", {
+  const [storedDates, setDates] = useLocalStorage("selectedDates", {
     startDate: getOneWeekAgo(),
     endDate: new Date(),
   });
 
+  const [filterProperties, setFilterProperties] = useState<
+    FilterProperties<{ min: null; max: null }>
+  >(storedFilterProperties);
+  const debouncedFilterProperties = useDebounce(filterProperties);
 
   const [dashboardPeriod, setDashboardPeriod] = useState<{
     startDate: Date;
     endDate: Date;
   }>({
-    startDate: new Date(storedDashboardPeriod["startDate"]),
-    endDate: new Date(storedDashboardPeriod["endDate"]),
+    startDate: new Date(storedDates["startDate"]),
+    endDate: new Date(storedDates["endDate"]),
   });
 
   const debouncedDateSelection = useDebounce(dashboardPeriod);
@@ -45,20 +78,39 @@ function Dashboard() {
           transactions.date < dashboardPeriod["endDate"].getTime()
       )
     );
+  const [transactions, setTransactions] = useState<Record<string, Totals>>({});
+
   useEffect(() => {
+    if (debouncedFilterProperties) {
+      setTransactions(
+        calculateTotal(
+          transactionsDateFiltered,
+          filterProperties["group"],
+          filterProperties
+        )
+      );
+      setStoredFilterProperties(filterProperties);
+    }
     if (debouncedDateSelection) {
       const dateFiltered = transactionsData.filter(
         (transactions) =>
           transactions.date > dashboardPeriod["startDate"].getTime() &&
           transactions.date < dashboardPeriod["endDate"].getTime()
       );
-      setStoredDashboardPeriod({
+      setDates({
         startDate: dashboardPeriod["startDate"],
         endDate: dashboardPeriod["endDate"],
       });
       setTransactionsDateFiltered(dateFiltered);
+      setTransactions(
+        calculateTotal(
+          dateFiltered,
+          filterProperties["group"],
+          filterProperties
+        )
+      );
     }
-  }, [debouncedDateSelection]);
+  }, [debouncedFilterProperties, debouncedDateSelection]);
 
   return (
     <div className="drawer ">
@@ -91,13 +143,16 @@ function Dashboard() {
             </label>
           </div>
           <div className="ml-auto">
-          <DashboardTopBar
+            <DashboardTopBar
               dashboardPeriod={dashboardPeriod}
               updateDashboardPeriod={setDashboardPeriod}
+              filterProperties={filterProperties}
+              setFilterProperties={setFilterProperties}
             />
           </div>
         </div>
         <main className="flex-1 overflow-y-auto pt-8 px-6  bg-base-200">
+            <DashboardTopCards transactions={transactions} />
         </main>
       </div>
       <LeftSidebar />
