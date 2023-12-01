@@ -2,11 +2,17 @@ import FunnelIcon from "@heroicons/react/24/outline/FunnelIcon";
 import { Dispatch, SetStateAction } from "react";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 
-import { FilterProperties, selectableProperties } from "@/app/dashboard/page";
+import { FilterProperties } from "@/app/dashboard/page";
 import { SelectablePropertiesType } from "@/utils/types";
 
 import Dropdown, { DropdownToggableChildren } from "../Dropdown";
 import InputText from "../InputText";
+
+export const selectableProperties = [
+  { value: "industry", name: "Industry" },
+  { value: "state", name: "State" },
+  { value: "account", name: "Account" },
+];
 
 interface DashboardTopBarProps {
   dashboardPeriod: { startDate: Date; endDate: Date };

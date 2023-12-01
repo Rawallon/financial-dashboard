@@ -17,12 +17,6 @@ import calculateTotal, { Totals } from "@/utils/transactionUtils";
 import { SelectablePropertiesType } from "@/utils/types";
 
 const transactionsData = transactionsJSON as Transactions;
-export const selectableProperties = [
-  { value: "industry", name: "Industry" },
-  { value: "state", name: "State" },
-  { value: "account", name: "Account" },
-];
-
 export type FilterProperties<T> = {
   group: SelectablePropertiesType;
   withdraw: T;
