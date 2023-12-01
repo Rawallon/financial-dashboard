@@ -159,6 +159,10 @@ function Dashboard() {
                 dates={dashboardPeriod}
                 transactions={transactionsDateFiltered}
               />
+              <BarChart
+                dates={dashboardPeriod}
+                transactions={transactionsDateFiltered}
+              />
             </div>
         </main>
       </div>
